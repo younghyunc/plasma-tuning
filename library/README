@@ -1,0 +1,20 @@
+# A wrapper for PLASMA library
+#
+# Author: Younghyun Cho <younghyun@berkeley.edu>
+
+This wrapper library provides a simple interface for using PLASMA library.
+This wrapper can easily be called in Python environment.
+We currently consider using this for autotuning research.
+
+# Compilation
+
+1. Write a make.inc file with the information about the PLASMA library path.
+
+make.inc:
+
+PLASMA_INC_PATH=[Your PLASMA include files path]
+PLASMA_LIB_PATH=[Your PLASMA library path]
+
+2. Compile using Makefile.
+
+$ make
