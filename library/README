@@ -14,6 +14,8 @@ make.inc:
 
 PLASMA_INC_PATH=[Your PLASMA include files path]
 PLASMA_LIB_PATH=[Your PLASMA library path]
+PAPI_INC_PATH=[Your PAPI include files path]
+PAPI_LIB_PATH=[Your PAPI library path]
 
 2. Compile using Makefile.
 

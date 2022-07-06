@@ -7,7 +7,7 @@ import sys
 import ctypes
 import numpy as np
 
-from ctypes import c_int, c_double, POINTER
+from ctypes import c_int, c_double, c_longlong, POINTER
 
 def test_plasma_dgemm(plasmalib):
 
@@ -17,7 +17,12 @@ def test_plasma_dgemm(plasmalib):
     B = np.array([[0, 1], [2, 3]], dtype="float64")
     C = np.array([[0, 0], [0, 0]], dtype="float64")
 
-    plasmalib.Plasma_DGEMM(\
+    value = c_longlong(0)
+    print ("value!: ", value.value)
+
+    event_name = "perf::PERF_COUNT_HW_CPU_CYCLES"
+
+    plasmalib.Plasma_DGEMM_Profiling(\
             c_int(2),\
             c_int(2),\
             c_int(2),\
@@ -30,9 +35,12 @@ def test_plasma_dgemm(plasmalib):
             C.ctypes.data_as(POINTER(c_double)),\
             c_int(2),\
             c_int(256),\
-            c_int(64))
+            c_int(64),
+            ctypes.c_char_p(event_name.encode('utf-8')),
+            ctypes.pointer(value))
 
     print (C)
+    print ("value: ", value.value)
 
     return
 
@@ -65,6 +73,8 @@ def test_plasma_dgels(plasmalib):
     return
 
 if __name__ == "__main__":
+    omp_num_threads = os.environ.get("OMP_NUM_THREADS")
+    print ("omp_num_threads: ", omp_num_threads)
 
     plasmalib = ctypes.CDLL("./library/plasma_tuning.so", mode=ctypes.RTLD_GLOBAL)
 
