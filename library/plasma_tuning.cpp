@@ -166,6 +166,73 @@ int Plasma_DGEMM(int m, int n, int k,
     return ret;
 }
 
+int Plasma_DGEQRF_Profiling(int m, int n, double* A, int nb, int ib,
+        char* event_name, long long* value)
+{
+    std::cout << "[Plasma_DGEQRF] calling plasma_dgeqrf" << std::endl;
+
+    StartProfiling(event_name);
+
+    int lda = std::max(1, m);
+
+    plasma_init();
+
+    //plasma_set(PlasmaTuning, PlasmaDisabled);
+    plasma_set(PlasmaNb, nb);
+    plasma_set(PlasmaIb, ib);
+
+    plasma_enum_t trans = PlasmaNoTrans;
+
+    plasma_time_t start = omp_get_wtime();
+
+    plasma_desc_t T;
+    int ret = plasma_dgeqrf(m, n, A, lda, &T);
+    printf("ret: %d\n", ret);
+
+    plasma_time_t stop = omp_get_wtime();
+    plasma_time_t time = stop-start;
+
+    plasma_desc_destroy(&T);
+    printf("time: %lf\n", time);
+
+    plasma_finalize();
+
+    StopProfiling(value);
+
+    return ret;
+}
+
+int Plasma_DGEQRF(int m, int n, double* A, int nb, int ib)
+{
+    std::cout << "[Plasma_DGEQRF] calling plasma_dgeqrf" << std::endl;
+
+    int lda = std::max(1, m);
+
+    plasma_init();
+
+    //plasma_set(PlasmaTuning, PlasmaDisabled);
+    plasma_set(PlasmaNb, nb);
+    plasma_set(PlasmaIb, ib);
+
+    plasma_enum_t trans = PlasmaNoTrans;
+
+    plasma_time_t start = omp_get_wtime();
+
+    plasma_desc_t T;
+    int ret = plasma_dgeqrf(m, n, A, lda, &T);
+    printf("ret: %d\n", ret);
+
+    plasma_time_t stop = omp_get_wtime();
+    plasma_time_t time = stop-start;
+
+    plasma_desc_destroy(&T);
+    printf("time: %lf\n", time);
+
+    plasma_finalize();
+
+    return ret;
+}
+
 int Plasma_DGELS(int m, int n, int nrhs,
         double* A, double* B,
         int nb, int ib)

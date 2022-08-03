@@ -26,6 +26,10 @@ int Plasma_DGEMM(int m, int n, int k,
         double beta, double* C, int ldc,
         int nb, int ib);
 
+int Plasma_DGEQRF_Profiling(int m, int n, double* A, int nb, int ib, char* event_name, long long* value);
+
+int Plasma_DGEQRF(int m, int n, double* A, int nb, int ib);
+
 int Plasma_DGELS(int m, int n, int nrhs,
         double* A, double* B,
         int nb, int ib);
